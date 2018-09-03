@@ -20,6 +20,14 @@ body {
     justify-content: center;
 }
 
+.text-container {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .button {
     display: flex;
     align-items: center;
@@ -45,4 +53,9 @@ body {
     box-shadow: -3px 5px #3B9E40;
     transform: translateX(5px);
     transform: translateY(5px);
+}
+
+#totalClicks {
+    margin: 0px;
+    font-size: 15px;
 }
