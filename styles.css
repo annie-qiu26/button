@@ -33,16 +33,17 @@ body {
     background-color: #4CAF50;
     border: none;
     border-radius: 50%;
-    box-shadow: -3px 8px #3B9E40;
+    box-shadow: -13px 13px #09893c;
+/*    transition-property: transform, box-shadow;
+    transition-duration: 0.05s;
+    transition-timing-function: ease-out;*/
 }
   
 .button:hover {
-    background-color: #3e8e41
+    background-color: #45A945;
 }
 
 .button:active {
-    background-color: #3e8e41;
-    box-shadow: -3px 5px #3B9E40;
-    transform: translateX(5px);
-    transform: translateY(5px);
+    box-shadow: -3px 3px #3B9E40;
+    transform: translate(-10px, 10px);
 }
