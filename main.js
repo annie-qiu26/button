@@ -6,13 +6,30 @@ var visits = null;
 var clientClicks = null;
 var ipAddress = null;
 
+var numIpAddresses = null;
+var numLessAddresses = null;
+
 var setInitialStats = (incrementVisits) => {
     firebase.database().ref('ipAddresses/' + ipAddress + '/visits').once('value').then(function(snapshot){
         visits = snapshot.val();
         incrementVisits();
     });
+
     firebase.database().ref('ipAddresses/' + ipAddress + '/clicks').once('value').then(function(snapshot){
         clientClicks = snapshot.val();
+        document.getElementById("clicks").innerHTML = clientClicks;
+
+        firebase.database().ref('ipAddresses').orderByChild('clicks').on('value', function(snapshot) {
+            addresses = snapshot.val();
+
+            numIpAddresses = Object.keys(addresses).length;
+            console.log(Object.keys(addresses).map(key => addresses[key]));
+            numLessAddresses = Object.keys(addresses).filter(key => addresses[key]["clicks"] < clientClicks).length;
+            console.log(numIpAddresses);
+            console.log(numLessAddresses);
+
+            document.getElementById("percentile").innerHTML = "You're in the " + (numLessAddresses * 100 / (numIpAddresses - 1)).toFixed(2) + " percentile";
+        });
     });
 }
 
@@ -27,6 +44,8 @@ var incrementClientClicks = () => {
     firebase.database().ref('ipAddresses/' + ipAddress + '/clicks').set(
         clicks = clientClicks
     )
+
+    document.getElementById("clicks").innerHTML = clientClicks;
 }
 
 /**
@@ -51,17 +70,16 @@ request.send();
 
 
 /**
- * Initial setup to get reference for firebase value of clicks and
- * ip addresses
+ * Initial setup to get reference for firebase value of totalClicks
  */
 var clicksRef = firebase.database().ref("clicks");
 
 clicksRef.once('value').then(function(snapshot){
-    document.getElementById("clicks").innerHTML = snapshot.val();
+    document.getElementById("totalClicks").innerHTML = snapshot.val() + " Worldwide Clicks";
 });
 
 clicksRef.on("value", function(snapshot) {
-    document.getElementById("clicks").innerHTML = snapshot.val();
+    document.getElementById("totalClicks").innerHTML = snapshot.val() + " Worldwide Clicks";
 });
 
 /**
@@ -69,15 +87,24 @@ clicksRef.on("value", function(snapshot) {
  * in Firebase database
  */
 var incrementClicks = () => {
-    var clicks = parseInt(document.getElementById("clicks").innerHTML);
+    var clicks = parseInt(document.getElementById("totalClicks").innerHTML);
     clicks += 1;
     
     // Update counts in databse and html
     clicksRef.set(clicks = clicks);
-    document.getElementById("clicks").innerHTML = clicks;
 
+    document.getElementById("totalClicks").innerHTML = clicks + " Worldwide Clicks";
     incrementClientClicks();
 }
+
+/**
+ * Function to calculate the percentile
+ */
+var ipAddressesRef = firebase.database().ref('ipAddresses').orderByChild('clicks').endAt(clientClicks);
+// firebase.database().ref('ipAddresses').orderByChild('clicks').endAt(clientClicks);.on('value', function(snapshot) {
+//     console.log(snapshot.val());
+//     console.log(Object.keys(snapshot.val()).length);
+// });
 
 /**
  * Function for button click

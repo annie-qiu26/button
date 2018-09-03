@@ -20,6 +20,14 @@ body {
     justify-content: center;
 }
 
+.text-container {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .button {
     display: flex;
     align-items: center;
@@ -34,9 +42,6 @@ body {
     border: none;
     border-radius: 50%;
     box-shadow: -13px 13px #09893c;
-/*    transition-property: transform, box-shadow;
-    transition-duration: 0.05s;
-    transition-timing-function: ease-out;*/
 }
   
 .button:hover {
@@ -46,4 +51,9 @@ body {
 .button:active {
     box-shadow: -3px 3px #3B9E40;
     transform: translate(-10px, 10px);
+}
+
+#totalClicks {
+    margin: 0px;
+    font-size: 15px;
 }
