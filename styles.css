@@ -37,11 +37,11 @@ body {
     font-size: 48px;
     cursor: pointer;
     outline: none;
-    color: #fff;
+    color: #09893c;
     background-color: #4CAF50;
     border: none;
     border-radius: 50%;
-    box-shadow: -13px 13px #09893c;
+    box-shadow: -13px 13px;
     touch-action: manipulation;
     -moz-user-select: none;
     -khtml-user-select: none;
@@ -56,11 +56,15 @@ body {
 }
 
 .button:active {
-    box-shadow: -3px 3px #3B9E40;
+    box-shadow: -3px 3px;
     transform: translate(-10px, 10px);
 }
 
 #totalClicks {
     margin: 0px;
     font-size: 15px;
+}
+
+#clicks {
+    color: #fff;
 }

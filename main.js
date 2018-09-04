@@ -9,7 +9,8 @@ var ipAddress = null;
 var numIpAddresses = null;
 var numLessAddresses = null;
 
-var button = document.getElementById("clicks");
+var button = document.getElementById("button");
+var clickCount = document.getElementById("clicks");
 
 var setInitialStats = (incrementVisits) => {
     firebase.database().ref('ipAddresses/' + ipAddress + '/visits').once('value').then(function(snapshot){
@@ -19,7 +20,7 @@ var setInitialStats = (incrementVisits) => {
 
     firebase.database().ref('ipAddresses/' + ipAddress + '/clicks').once('value').then(function(snapshot){
         clientClicks = snapshot.val();
-        button.innerHTML = clientClicks;
+        clickCount.innerHTML = clientClicks;
     });
 
     firebase.database().ref('ipAddresses').orderByChild('clicks').on('value', function(snapshot) {
@@ -48,7 +49,7 @@ var incrementClientClicks = () => {
         clicks = clientClicks
     );
 
-    button.innerHTML = clientClicks;
+    clickCount.innerHTML = clientClicks;
 };
 
 /**
@@ -98,7 +99,7 @@ var incrementClicks = () => {
     redness += 0.1;
     newColor = lerpColor(green, red, redness);
     button.style.backgroundColor = newColor;
-    button.style.boxShadow = "-13px 13px " + lerpColor(newColor, black, 0.25);
+    button.style.color = lerpColor(newColor, black, 0.25);
 
     incrementClientClicks();
 };
@@ -128,7 +129,7 @@ var decreaseColor = () => {
     var newColor = lerpColor(green, red, redness);
     redness *= 0.95;
     button.style.backgroundColor = newColor;
-    button.style.boxShadow = "-13px 13px " + lerpColor(newColor, black, 0.25);
+    button.style.color = lerpColor(newColor, black, 0.25);
     setTimeout(decreaseColor, 50);
 };
 
