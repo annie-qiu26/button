@@ -68,7 +68,6 @@ request.onreadystatechange = function () {
 
 request.send();
 
-
 /**
  * Initial setup to get reference for firebase value of totalClicks
  */
@@ -114,8 +113,7 @@ button.addEventListener("touchstart", function(e) {
  * Functions to change the color of the button
  */
 var buttonColor = window.getComputedStyle(button, null).getPropertyValue("background-color");
-console.log(buttonColor);
-
+console.log(Number(buttonColor));
 
 // Taken from the awesome ROT.js roguelike dev library at
 // https://github.com/ondras/rot.js
