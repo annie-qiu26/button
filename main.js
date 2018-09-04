@@ -33,6 +33,9 @@ var setInitialStats = (incrementVisits) => {
 
 };
 
+/*
+* Incrementing functions (for visits and clicks)
+*/
 var incrementVisits = () => { 
     firebase.database().ref('ipAddresses/' + ipAddress + '/visits').set(
         visits = (visits + 1) || 1
@@ -92,8 +95,68 @@ var incrementClicks = () => {
     // Update counts in databse and html
     clicksRef.set(clicks = clicks);
 
+    redness += 0.1;
+    newColor = lerpColor(green, red, redness);
+    button.style.backgroundColor = newColor;
+    button.style.boxShadow = "-13px 13px " + lerpColor(newColor, black, 0.25);
+
     incrementClientClicks();
 };
+
+/**
+ * Functions to change the color of the button
+ */
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+var buttonColor = window.getComputedStyle(button, null).getPropertyValue("background-color");
+buttonColor = buttonColor.substring(4, buttonColor.length - 1).split(',').map(key => Number(key));
+buttonColor = rgbToHex(buttonColor[0], buttonColor[1], buttonColor[2]);
+
+var green = "#4CAF50";
+var red = "#E03C1F";
+var black = "#000000";
+var redness = 0;
+
+var decreaseColor = () => {
+    var newColor = lerpColor(green, red, redness);
+    redness *= 0.95;
+    button.style.backgroundColor = newColor;
+    button.style.boxShadow = "-13px 13px " + lerpColor(newColor, black, 0.25);
+    setTimeout(decreaseColor, 50);
+};
+
+setTimeout(decreaseColor, 50);
+
+
+/**
+ * A linear interpolator for hexadecimal colors
+ * @param {String} a
+ * @param {String} b
+ * @param {Number} amount
+ * @example
+ * // returns #7F7F7F
+ * lerpColor('#000000', '#ffffff', 0.5)
+ * @returns {String}
+ */
+function lerpColor(a, b, amount) { 
+
+    var ah = parseInt(a.replace(/#/g, ''), 16),
+        ar = ah >> 16, ag = ah >> 8 & 0xff, ab = ah & 0xff,
+        bh = parseInt(b.replace(/#/g, ''), 16),
+        br = bh >> 16, bg = bh >> 8 & 0xff, bb = bh & 0xff,
+        rr = ar + amount * (br - ar),
+        rg = ag + amount * (bg - ag),
+        rb = ab + amount * (bb - ab);
+
+    return '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
+}
 
 /**
  * Function for button click
@@ -108,20 +171,3 @@ button.addEventListener("touchstart", function(e) {
     e.preventDefault();
     incrementClicks();
 });
-
-/**
- * Functions to change the color of the button
- */
-var buttonColor = window.getComputedStyle(button, null).getPropertyValue("background-color");
-console.log(Number(buttonColor));
-
-// Taken from the awesome ROT.js roguelike dev library at
-// https://github.com/ondras/rot.js
-var interpolateColor = function(color1, color2, factor) {
-    if (arguments.length < 3) { factor = 0.5; }
-    var result = color1.slice();
-    for (var i=0;i<3;i++) {
-      result[i] = Math.round(result[i] + factor*(color2[i]-color1[i]));
-    }
-    return result;
-};
