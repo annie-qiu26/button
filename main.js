@@ -24,12 +24,13 @@ var setInitialStats = (incrementVisits) => {
 
     firebase.database().ref('ipAddresses').orderByChild('clicks').on('value', function(snapshot) {
         var addresses = snapshot.val();
-    
+
         numIpAddresses = Object.keys(addresses).length;
         numLessAddresses = Object.keys(addresses).filter(key => addresses[key]["clicks"] < addresses[ipAddress]["clicks"]).length;
-    
+
         document.getElementById("percentile").innerHTML = "You're in the " + (numLessAddresses * 100 / (numIpAddresses - 1)).toFixed(2) + " percentile";
     });
+
 };
 
 var incrementVisits = () => { 
@@ -45,7 +46,11 @@ var incrementClientClicks = () => {
     );
 
     button.innerHTML = clientClicks;
+<<<<<<< HEAD
 }
+=======
+};
+>>>>>>> e9a963e97ca92f76ea66015cb6e5427d974e6df1
 
 /**
  * Getting ip address of client who visited and incrementing
