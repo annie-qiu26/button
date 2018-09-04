@@ -22,30 +22,42 @@ var setInitialStats = (incrementVisits) => {
         button.innerHTML = clientClicks;
 
         firebase.database().ref('ipAddresses').orderByChild('clicks').on('value', function(snapshot) {
-            addresses = snapshot.val();
+            var addresses = snapshot.val();
 
             numIpAddresses = Object.keys(addresses).length;
+<<<<<<< HEAD
             numLessAddresses = Object.keys(addresses).filter(key => addresses[key]["clicks"] < clientClicks).length;
+=======
+            console.log(Object.keys(addresses).map(key => addresses[key]));
+            numLessAddresses = Object.keys(addresses).filter(key => addresses[key]["clicks"] < addresses[ipAddress]["clicks"]).length;
+            console.log(numIpAddresses);
+            console.log(numLessAddresses);
+>>>>>>> 3095f45183a7384b56e66619e5dfd66de50af97f
 
             document.getElementById("percentile").innerHTML = "You're in the " + (numLessAddresses * 100 / (numIpAddresses - 1)).toFixed(2) + " percentile";
         });
     });
-}
+};
 
 var incrementVisits = () => { 
     firebase.database().ref('ipAddresses/' + ipAddress + '/visits').set(
         visits = (visits + 1) || 1
     );
-}
+};
 
 var incrementClientClicks = () => {
-    clientClicks += 1
+    clientClicks += 1;
     firebase.database().ref('ipAddresses/' + ipAddress + '/clicks').set(
         clicks = clientClicks
-    )
+    );
 
+<<<<<<< HEAD
     button.innerHTML = clientClicks;
 }
+=======
+    document.getElementById("clicks").innerHTML = clientClicks;
+};
+>>>>>>> 3095f45183a7384b56e66619e5dfd66de50af97f
 
 /**
  * Getting ip address of client who visited and incrementing
@@ -93,14 +105,19 @@ var incrementClicks = () => {
     clicksRef.set(clicks = clicks);
 
     incrementClientClicks();
-}
+};
 
 /**
  * Function for button click
  */
-var card = document.querySelector('.button');
+var button = document.querySelector('.button');
 
-card.addEventListener("click", function() {
+button.addEventListener("mousedown", function() {
+    incrementClicks();
+});
+
+button.addEventListener("touchstart", function(e) {
+    e.preventDefault();
     incrementClicks();
 });
 
