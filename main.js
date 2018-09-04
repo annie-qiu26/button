@@ -1,35 +1,48 @@
 /**
- * Initial setup for ipAddress object in firebase and functions
+ * Object to create a fingerprint that uniquely identifies devices
+ */
+var fingerprint = null;
+
+new Fingerprint2({excludeUserAgent: true, excludeTimezoneOffset: true, excludeTimezone: true, excludeAdBlock: true}).get(function(result, components) {
+    fingerprint = result;
+
+    setInitialStats(incrementVisits);
+})
+
+/**
+ * Initial setup for fingerprint object in firebase and functions
  * to increment visit and client clicks count
  */
 var visits = null;
 var clientClicks = null;
-var ipAddress = null;
 
-var numIpAddresses = null;
-var numLessAddresses = null;
+var numFingerprints = null;
+var numLessFingerprints = null;
 
 var button = document.getElementById("button");
 var clickCount = document.getElementById("clicks");
 
 var setInitialStats = (incrementVisits) => {
-    firebase.database().ref('ipAddresses/' + ipAddress + '/visits').once('value').then(function(snapshot){
+    firebase.database().ref('fingerprints/' + fingerprint + '/visits').once('value').then(function(snapshot){
         visits = snapshot.val();
         incrementVisits();
     });
 
-    firebase.database().ref('ipAddresses/' + ipAddress + '/clicks').once('value').then(function(snapshot){
+    firebase.database().ref('fingerprints/' + fingerprint + '/clicks').once('value').then(function(snapshot){
         clientClicks = snapshot.val();
         clickCount.innerHTML = clientClicks;
     });
 
-    firebase.database().ref('ipAddresses').orderByChild('clicks').on('value', function(snapshot) {
-        var addresses = snapshot.val();
+    firebase.database().ref('fingerprints').orderByChild('clicks').on('value', function(snapshot) {
+        var fingerprints = snapshot.val();
 
-        numIpAddresses = Object.keys(addresses).length;
-        numLessAddresses = Object.keys(addresses).filter(key => addresses[key]["clicks"] < addresses[ipAddress]["clicks"]).length;
+        numFingerprints = Object.keys(fingerprints).length;
+        
+        if (fingerprints[fingerprint]) {
+            numLessFingerprints = Object.keys(fingerprints).filter(key => fingerprints[key]["clicks"] < fingerprints[fingerprint]["clicks"]).length;
+        }
 
-        document.getElementById("percentile").innerHTML = "You're in the " + (numLessAddresses * 100 / (numIpAddresses - 1)).toFixed(2) + " percentile";
+        document.getElementById("percentile").innerHTML = "You're in the " + (numLessFingerprints * 100 / (numFingerprints - 1)).toFixed(2) + " percentile";
     });
 
 };
@@ -38,39 +51,19 @@ var setInitialStats = (incrementVisits) => {
 * Incrementing functions (for visits and clicks)
 */
 var incrementVisits = () => { 
-    firebase.database().ref('ipAddresses/' + ipAddress + '/visits').set(
+    firebase.database().ref('fingerprints/' + fingerprint + '/visits').set(
         visits = (visits + 1) || 1
     );
 };
 
 var incrementClientClicks = () => {
     clientClicks += 1;
-    firebase.database().ref('ipAddresses/' + ipAddress + '/clicks').set(
+    firebase.database().ref('fingerprints/' + fingerprint + '/clicks').set(
         clicks = clientClicks
     );
 
     clickCount.innerHTML = clientClicks;
 };
-
-/**
- * Getting ip address of client who visited and incrementing
- * visit count
- */
-var request = new XMLHttpRequest();
-var API_URL = 'https://api.ipdata.co/ip?api-key=4d52639d5af7770d42c53fe002b5b0ec80922dd9ac4fe84de2bbe35c';
-
-request.open('GET', API_URL);
-
-request.setRequestHeader('Accept', 'application/json');
-
-request.onreadystatechange = function () {
- if (this.readyState === 4) {
-    ipAddress = this.responseText.replace(/\./g, '-');
-    setInitialStats(incrementVisits);
- }
-};
-
-request.send();
 
 /**
  * Initial setup to get reference for firebase value of totalClicks
