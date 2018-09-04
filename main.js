@@ -20,22 +20,15 @@ var setInitialStats = (incrementVisits) => {
     firebase.database().ref('ipAddresses/' + ipAddress + '/clicks').once('value').then(function(snapshot){
         clientClicks = snapshot.val();
         button.innerHTML = clientClicks;
+    });
 
-        firebase.database().ref('ipAddresses').orderByChild('clicks').on('value', function(snapshot) {
-            var addresses = snapshot.val();
-
-            numIpAddresses = Object.keys(addresses).length;
-<<<<<<< HEAD
-            numLessAddresses = Object.keys(addresses).filter(key => addresses[key]["clicks"] < clientClicks).length;
-=======
-            console.log(Object.keys(addresses).map(key => addresses[key]));
-            numLessAddresses = Object.keys(addresses).filter(key => addresses[key]["clicks"] < addresses[ipAddress]["clicks"]).length;
-            console.log(numIpAddresses);
-            console.log(numLessAddresses);
->>>>>>> 3095f45183a7384b56e66619e5dfd66de50af97f
-
-            document.getElementById("percentile").innerHTML = "You're in the " + (numLessAddresses * 100 / (numIpAddresses - 1)).toFixed(2) + " percentile";
-        });
+    firebase.database().ref('ipAddresses').orderByChild('clicks').on('value', function(snapshot) {
+        var addresses = snapshot.val();
+    
+        numIpAddresses = Object.keys(addresses).length;
+        numLessAddresses = Object.keys(addresses).filter(key => addresses[key]["clicks"] < addresses[ipAddress]["clicks"]).length;
+    
+        document.getElementById("percentile").innerHTML = "You're in the " + (numLessAddresses * 100 / (numIpAddresses - 1)).toFixed(2) + " percentile";
     });
 };
 
@@ -51,13 +44,8 @@ var incrementClientClicks = () => {
         clicks = clientClicks
     );
 
-<<<<<<< HEAD
     button.innerHTML = clientClicks;
 }
-=======
-    document.getElementById("clicks").innerHTML = clientClicks;
-};
->>>>>>> 3095f45183a7384b56e66619e5dfd66de50af97f
 
 /**
  * Getting ip address of client who visited and incrementing
@@ -130,7 +118,7 @@ console.log(buttonColor);
 
 // Taken from the awesome ROT.js roguelike dev library at
 // https://github.com/ondras/rot.js
-var _interpolateColor = function(color1, color2, factor) {
+var interpolateColor = function(color1, color2, factor) {
     if (arguments.length < 3) { factor = 0.5; }
     var result = color1.slice();
     for (var i=0;i<3;i++) {
