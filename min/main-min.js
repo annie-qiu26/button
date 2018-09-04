@@ -164,6 +164,12 @@ button.addEventListener("mousedown", function() {
 button.addEventListener("touchstart", function(e) {
     e.preventDefault();
     incrementClicks();
+    button.setActive(true);
+});
+
+button.addEventListener("touchend", function(e) {
+    e.preventDefault();
+    button.setActive(false);
 });
 
 
