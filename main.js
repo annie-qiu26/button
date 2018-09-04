@@ -20,33 +20,33 @@ var setInitialStats = (incrementVisits) => {
         document.getElementById("clicks").innerHTML = clientClicks;
 
         firebase.database().ref('ipAddresses').orderByChild('clicks').on('value', function(snapshot) {
-            addresses = snapshot.val();
+            var addresses = snapshot.val();
 
             numIpAddresses = Object.keys(addresses).length;
             console.log(Object.keys(addresses).map(key => addresses[key]));
-            numLessAddresses = Object.keys(addresses).filter(key => addresses[key]["clicks"] < clientClicks).length;
+            numLessAddresses = Object.keys(addresses).filter(key => addresses[key]["clicks"] < addresses[ipAddress]["clicks"]).length;
             console.log(numIpAddresses);
             console.log(numLessAddresses);
 
             document.getElementById("percentile").innerHTML = "You're in the " + (numLessAddresses * 100 / (numIpAddresses - 1)).toFixed(2) + " percentile";
         });
     });
-}
+};
 
 var incrementVisits = () => { 
     firebase.database().ref('ipAddresses/' + ipAddress + '/visits').set(
         visits = (visits + 1) || 1
     );
-}
+};
 
 var incrementClientClicks = () => {
-    clientClicks += 1
+    clientClicks += 1;
     firebase.database().ref('ipAddresses/' + ipAddress + '/clicks').set(
         clicks = clientClicks
-    )
+    );
 
     document.getElementById("clicks").innerHTML = clientClicks;
-}
+};
 
 /**
  * Getting ip address of client who visited and incrementing
@@ -95,7 +95,7 @@ var incrementClicks = () => {
 
     document.getElementById("totalClicks").innerHTML = clicks + " Worldwide Clicks";
     incrementClientClicks();
-}
+};
 
 /**
  * Function to calculate the percentile
@@ -109,8 +109,13 @@ var ipAddressesRef = firebase.database().ref('ipAddresses').orderByChild('clicks
 /**
  * Function for button click
  */
-var card = document.querySelector('.button');
+var button = document.querySelector('.button');
 
-card.addEventListener("click", function() {
+button.addEventListener("mousedown", function() {
+    incrementClicks();
+});
+
+button.addEventListener("touchstart", function(e) {
+    e.preventDefault();
     incrementClicks();
 });
