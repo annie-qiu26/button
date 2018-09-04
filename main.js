@@ -46,11 +46,7 @@ var incrementClientClicks = () => {
     );
 
     button.innerHTML = clientClicks;
-<<<<<<< HEAD
-}
-=======
 };
->>>>>>> e9a963e97ca92f76ea66015cb6e5427d974e6df1
 
 /**
  * Getting ip address of client who visited and incrementing
