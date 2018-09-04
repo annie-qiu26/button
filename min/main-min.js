@@ -9,6 +9,8 @@ var ipAddress = null;
 var numIpAddresses = null;
 var numLessAddresses = null;
 
+var button = document.getElementById("clicks");
+
 var setInitialStats = (incrementVisits) => {
     firebase.database().ref('ipAddresses/' + ipAddress + '/visits').once('value').then(function(snapshot){
         visits = snapshot.val();
@@ -17,16 +19,13 @@ var setInitialStats = (incrementVisits) => {
 
     firebase.database().ref('ipAddresses/' + ipAddress + '/clicks').once('value').then(function(snapshot){
         clientClicks = snapshot.val();
-        document.getElementById("clicks").innerHTML = clientClicks;
+        button.innerHTML = clientClicks;
 
         firebase.database().ref('ipAddresses').orderByChild('clicks').on('value', function(snapshot) {
             var addresses = snapshot.val();
 
             numIpAddresses = Object.keys(addresses).length;
-            console.log(Object.keys(addresses).map(key => addresses[key]));
             numLessAddresses = Object.keys(addresses).filter(key => addresses[key]["clicks"] < addresses[ipAddress]["clicks"]).length;
-            console.log(numIpAddresses);
-            console.log(numLessAddresses);
 
             document.getElementById("percentile").innerHTML = "You're in the " + (numLessAddresses * 100 / (numIpAddresses - 1)).toFixed(2) + " percentile";
         });
@@ -45,7 +44,7 @@ var incrementClientClicks = () => {
         clicks = clientClicks
     );
 
-    document.getElementById("clicks").innerHTML = clientClicks;
+    button.innerHTML = clientClicks;
 };
 
 /**
@@ -93,18 +92,8 @@ var incrementClicks = () => {
     // Update counts in databse and html
     clicksRef.set(clicks = clicks);
 
-    document.getElementById("totalClicks").innerHTML = clicks + " Worldwide Clicks";
     incrementClientClicks();
 };
-
-/**
- * Function to calculate the percentile
- */
-var ipAddressesRef = firebase.database().ref('ipAddresses').orderByChild('clicks').endAt(clientClicks);
-// firebase.database().ref('ipAddresses').orderByChild('clicks').endAt(clientClicks);.on('value', function(snapshot) {
-//     console.log(snapshot.val());
-//     console.log(Object.keys(snapshot.val()).length);
-// });
 
 /**
  * Function for button click
@@ -119,4 +108,23 @@ button.addEventListener("touchstart", function(e) {
     e.preventDefault();
     incrementClicks();
 });
+
+/**
+ * Functions to change the color of the button
+ */
+var buttonColor = window.getComputedStyle(button, null).getPropertyValue("background-color");
+console.log(buttonColor);
+
+
+// Taken from the awesome ROT.js roguelike dev library at
+// https://github.com/ondras/rot.js
+var _interpolateColor = function(color1, color2, factor) {
+    if (arguments.length < 3) { factor = 0.5; }
+    var result = color1.slice();
+    for (var i=0;i<3;i++) {
+      result[i] = Math.round(result[i] + factor*(color2[i]-color1[i]));
+    }
+    return result;
+};
+
 
