@@ -39,7 +39,7 @@ var setInitialStats = (incrementVisits) => {
         numFingerprints = Object.keys(fingerprints).length;
         
         if (fingerprints[fingerprint]) {
-            numLessFingerprints = Object.keys(fingerprints).filter(key => fingerprints[key]["clicks"] < fingerprints[fingerprint]["clicks"]).length;
+            numLessFingerprints = Object.keys(fingerprints).filter(key => (fingerprints[key]["clicks"] || 0) < fingerprints[fingerprint]["clicks"]).length;
         }
 
         document.getElementById("percentile").innerHTML = "You're in the " + (numLessFingerprints * 100 / (numFingerprints - 1)).toFixed(2) + " percentile";
