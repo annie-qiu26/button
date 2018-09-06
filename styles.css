@@ -1,6 +1,7 @@
 html, body {
     height: 100%;
     font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
 }
   
 html {
@@ -34,7 +35,8 @@ body {
     justify-content: center;
     height: 300px;
     width: 300px;
-    font-size: 48px;
+    font-size: 54px;
+    font-weight: 500;
     cursor: pointer;
     outline: none;
     color: #09893c;
@@ -50,18 +52,20 @@ body {
     user-select: none;
     -webkit-tap-highlight-color: transparent;
 }
-  
-.button:hover {
-    background-color: #45A945;
-}
 
 .button:active {
     box-shadow: -3px 3px;
     transform: translate(-10px, 10px);
 }
 
+#percentile {
+    margin-top: 30px;
+    font-size: 20px;
+}
+
 #totalClicks {
     margin: 0px;
+    color: gray;
     font-size: 15px;
 }
 

@@ -42,7 +42,7 @@ var setInitialStats = (incrementVisits) => {
             numLessFingerprints = Object.keys(fingerprints).filter(key => (fingerprints[key]["clicks"] || 0) < fingerprints[fingerprint]["clicks"]).length;
         }
 
-        document.getElementById("percentile").innerHTML = "You're in the " + (numLessFingerprints * 100 / (numFingerprints - 1)).toFixed(2) + " percentile";
+        document.getElementById("percentile").innerHTML = "You beat <strong>" + (numLessFingerprints * 100 / (numFingerprints - 1)).toFixed(2) + "</strong>% of the competition";
     });
 
 };
@@ -164,4 +164,10 @@ button.addEventListener("mousedown", function() {
 button.addEventListener("touchstart", function(e) {
     e.preventDefault();
     incrementClicks();
+    button.setActive(true);
+});
+
+button.addEventListener("touchend", function(e) {
+    e.preventDefault();
+    button.setActive(false);
 });
