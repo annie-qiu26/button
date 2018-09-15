@@ -2,16 +2,18 @@
 <head>
   <title>Competitive Button</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body ontouchstart="">
   <div class="button-container">
-    <div class="button" id="clicks"></div>
+    <div class="button" id="button">
+        <p id="clicks"></p>
+    </div>
   </div>
   <div class="text-container">
-    <h3 id="percentile"> </h3>
-    <h5 id="totalClicks"> </h5> 
+    <p id="percentile"> </p>
+    <p id="totalClicks"> </p>
   </div>
 </body>
 <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-app.js"></script>
@@ -28,5 +30,6 @@
   };
   firebase.initializeApp(config);
 </script>
+<script src="https://cdn.jsdelivr.net/npm/fingerprintjs2/dist/fingerprint2.min.js"></script>
 <script src="main.js"></script>
 </html>

@@ -1,6 +1,7 @@
 html, body {
     height: 100%;
     font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
 }
   
 html {
@@ -34,14 +35,15 @@ body {
     justify-content: center;
     height: 300px;
     width: 300px;
-    font-size: 48px;
+    font-size: 54px;
+    font-weight: 500;
     cursor: pointer;
     outline: none;
-    color: #fff;
+    color: #09893c;
     background-color: #4CAF50;
     border: none;
     border-radius: 50%;
-    box-shadow: -13px 13px #09893c;
+    box-shadow: -13px 13px;
     touch-action: manipulation;
     -moz-user-select: none;
     -khtml-user-select: none;
@@ -50,17 +52,23 @@ body {
     user-select: none;
     -webkit-tap-highlight-color: transparent;
 }
-  
-.button:hover {
-    background-color: #45A945;
-}
 
 .button:active {
-    box-shadow: -3px 3px #3B9E40;
+    box-shadow: -3px 3px;
     transform: translate(-10px, 10px);
+}
+
+#percentile {
+    margin-top: 30px;
+    font-size: 20px;
 }
 
 #totalClicks {
     margin: 0px;
+    color: gray;
     font-size: 15px;
+}
+
+#clicks {
+    color: #fff;
 }
